@@ -1,22 +1,48 @@
 <template>
-  <div class="home flex-grow-1 d-flex flex-column align-items-center justify-content-center">
-    <div class="home-card p-5 bg-white rounded elevation-3">
-      <img
-        src="https://bcw.blob.core.windows.net/public/img/8600856373152463"
-        alt="CodeWorks Logo"
-        class="rounded-circle"
-      >
-      <h1 class="my-5 bg-dark text-white p-3 rounded text-center">
-        Vue 3 Starter
-      </h1>
-    </div>
+  <div class="div container-fluid">
+    <section class="row justify-content-center">
+      <div class="div col-12 col-md-3 p-3">
+        <section class="row justify-content-center align-items-center g-2 p-2">
+          <Profile :profile="profile" />
+        </section>
+      </div>
+      <div class="div col-12 col-md-6">
+        posts
+      </div>
+      <div class="div col-12 col-md-3 p-3">
+        <Com :coms="coms" />
+      </div>
+    </section>
   </div>
 </template>
 
 <script>
+import { computed } from "@vue/reactivity";
+import { onMounted } from "vue";
+import { AppState } from "../AppState.js";
+import { comService } from "../services/ComService.js"
+import { logger } from "../utils/Logger.js";
+import Pop from "../utils/Pop.js";
+
 export default {
   setup() {
-    return {}
+
+    async function getComs() {
+      try {
+        await comService.getComs()
+      } catch (error) {
+        Pop.error(error)
+        logger.error(error)
+      }
+    }
+
+    onMounted(() => {
+      getComs();
+    })
+    return {
+      profile: computed(() => AppState.account),
+      coms: computed(() => AppState.coms)
+    }
   }
 }
 </script>

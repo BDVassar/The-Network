@@ -22,7 +22,6 @@
 <script>
 import { AppState } from '../AppState';
 import { computed, reactive, onMounted } from 'vue';
-import { Account } from "../models/Account.js";
 export default {
   props: { profile: { type: Object, required: true } },
 

@@ -1,12 +1,10 @@
 <template>
-  <section v-if="(coms != null)" class="row justify-content-center align-items-center g-5 p-5">
-    <div class="col-12 elevation-2 p-0">
-      <img class="img-fluid" :src="coms[0].tall" alt="">
-    </div>
-    <div class="col-12  elevation-2 p-0">
-      <img class="img-fluid" :src="coms[1].tall" alt="">
-    </div>
-  </section>
+  <div class="col-12 elevation-2 p-0">
+    <img class="img-fluid" :src="coms[0].tall" alt="">
+  </div>
+  <div class="col-12  elevation-2 p-0">
+    <img class="img-fluid" :src="coms[1].tall" alt="">
+  </div>
 </template>
 
 

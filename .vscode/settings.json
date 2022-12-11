@@ -18,5 +18,8 @@
     "titleBar.inactiveBackground": "#5494b099",
     "titleBar.inactiveForeground": "#15202b99"
   },
-  "peacock.color": "#5494b0"
+  "peacock.color": "#5494b0",
+  "cSpell.words": [
+    "coms"
+  ]
 }

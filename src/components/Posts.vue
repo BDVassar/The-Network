@@ -9,7 +9,7 @@
           <div class="col-11">
             <h5>{{ post.creator.name }}</h5>
           </div>
-          <div class="col-1">
+          <div v-if="(post.creatorId == profile.id)" class="col-1">
             <h5 class="mdi mdi-dots-horizontal"></h5>
           </div>
         </section>
@@ -38,7 +38,10 @@ import { AppState } from '../AppState';
 import { computed, reactive, onMounted } from 'vue';
 import { Post } from "../models/Post.js";
 export default {
-  props: { post: { type: Post, required: true } },
+  props: {
+    post: { type: Post, required: true },
+    profile: { type: Object, required: true }
+  },
   setup() {
     return {}
   }

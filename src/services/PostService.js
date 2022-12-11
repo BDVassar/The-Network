@@ -8,6 +8,7 @@ class PostService {
   async getPosts() {
     const res = await api.get('api/posts')
     AppState.posts = res.data.posts.map(p => new Post(p))
+    logger.log(AppState.posts)
   }
 }
 

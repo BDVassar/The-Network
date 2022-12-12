@@ -26,6 +26,12 @@ class PostService {
     AppState.posts = res.data.posts.map(p => new Post(p))
   }
 
+  async createPost(postData) {
+    const res = await api.post('api/posts', postData)
+    logger.log(res.data)
+    AppState.posts.push(res.data)
+  }
+
   async changePage(page) {
     const res = await api.get('api/posts?page=' + page)
     logger.log('[NEXT/PREVIOUS PAGE]', res.data)

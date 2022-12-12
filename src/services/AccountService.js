@@ -11,6 +11,12 @@ class AccountService {
       logger.error('HAVE YOU STARTED YOUR SERVER YET???', err)
     }
   }
+
+  async updateProfile(profileData) {
+    const res = await api.put('/account', profileData)
+    logger.log('[UPDATING]', res.data);
+    AppState.account = res.data
+  }
 }
 
 export const accountService = new AccountService()

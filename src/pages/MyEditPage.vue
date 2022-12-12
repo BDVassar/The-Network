@@ -42,14 +42,64 @@
                   {{ profile.bio }}
                 </p>
               </div>
-              <div class="col-2">
-                <button class="btn btn-outline-info">Edit</button>
+              <div class="col-12 text-end">
+                <div class="dropdown">
+                  <button type="button" class="btn btn-outline-info dropdown-toggle" data-bs-toggle="dropdown"
+                    aria-expanded="false" data-bs-auto-close="outside">
+                    Edit Info
+                  </button>
+                  <form @submit.prevent="updateProfile()" class="dropdown-menu dropdown-menu-end p-3 w-100">
+                    <div class="form-floating mb-3">
+                      <input required type="text" class="form-control" v-model="profileData.name" id="floatingInput">
+                      <label for="floatingInput">Name</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                      <input type="text" class="form-control" v-model="profileData.email" id="floatingInput">
+                      <label for="floatingInput">Email address</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                      <input type="text" class="form-control" v-model="profileData.picture" id="floatingInput">
+                      <label for="floatingInput">Picture</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                      <input type="text" class="form-control" v-model="profileData.bio" id="floatingInput">
+                      <label for="floatingInput">Bio</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                      <input type="text" class="form-control" v-model="profileData.coverImg" id="floatingInput">
+                      <label for="floatingInput">Cover Image</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                      <input type="text" class="form-control" v-model="profileData.class" id="floatingInput">
+                      <label for="floatingInput">Class</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                      <input type="text" class="form-control" v-model="profileData.github" id="floatingInput">
+                      <label for="floatingInput">GitHub</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                      <input type="text" class="form-control" v-model="profileData.linkedin" id="floatingInput">
+                      <label for="floatingInput">LinkedIn</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                      <input type="text" class="form-control" v-model="profileData.resume" id="floatingInput">
+                      <label for="floatingInput">Resume</label>
+                    </div>
+                    <div class="mb-3">
+                      <div class="form-check">
+                        <input type="checkbox" class="form-check-input" v-model="profileData.graduated"
+                          id="dropdownCheck2">
+                        <label class="form-check-label" for="dropdownCheck2">
+                          Graduated
+                        </label>
+                      </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">UpDate</button>
+                  </form>
+                </div>
               </div>
             </section>
           </div>
-        </section>
-        <section class="row justify-content-centers p-2">
-          <CreatePost :profile="profile" />
         </section>
         <section v-if="profile" v-for="p in posts" class="row justify-content-center p-2">
           <Posts :post="p" :profile="profile" />
@@ -73,7 +123,7 @@
 </template>
 
 <script>
-import { computed } from "@vue/reactivity";
+import { computed, ref } from "@vue/reactivity";
 import { onMounted } from "vue";
 import { AppState } from "../AppState.js";
 import { comService } from "../services/ComService.js"
@@ -81,10 +131,11 @@ import { postService } from "../services/PostService.js"
 import { logger } from "../utils/Logger.js";
 import Pop from "../utils/Pop.js";
 import { useRoute } from "vue-router";
+import { accountService } from "../services/AccountService.js";
 
 export default {
   setup() {
-    const route = useRoute();
+    const profileData = ref({})
 
     async function getComs() {
       try {
@@ -109,9 +160,19 @@ export default {
       getPostsByMyId();
     })
     return {
+      profileData,
       profile: computed(() => AppState.account),
       coms: computed(() => AppState.coms),
-      posts: computed(() => AppState.posts)
+      posts: computed(() => AppState.posts),
+
+      async updateProfile() {
+        try {
+          await accountService.updateProfile(profileData.value)
+        } catch (error) {
+          Pop.error(error)
+          logger.log(error)
+        }
+      }
     }
   }
 }

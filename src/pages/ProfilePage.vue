@@ -43,7 +43,9 @@
                 </p>
               </div>
               <div v-if="(activeProfile.id == profile.id)" class="col-2">
-                <button class="btn btn-outline-info">Edit</button>
+                <router-link :to="{ name: 'Profile' }">
+                  <div class="btn btn-outline-info">Edit</div>
+                </router-link>
               </div>
             </section>
           </div>

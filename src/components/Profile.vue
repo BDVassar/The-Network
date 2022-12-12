@@ -13,9 +13,9 @@
       {{ profile.name }}
     </h5>
   </div>
-  <div class="col-12 mdi mdi-github">{{ profile.github }}</div>
-  <div class="col-12 mdi mdi-linkedin">{{ profile.linkedin }}</div>
-  <div class="col-12 mdi mdi-file">{{ profile.resume }}</div>
+  <div class="col-12 mdi mdi-github text-break">{{ profile.github }}</div>
+  <div class="col-12 mdi mdi-linkedin text-break">{{ profile.linkedin }}</div>
+  <div class="col-12 mdi mdi-file text-break">{{ profile.resume }}</div>
 </template>
 
 

@@ -8,7 +8,7 @@ class ProfileService {
   async getProfileBryProfileId(profileId) {
     const res = await api.get('api/profiles/' + profileId)
     AppState.activeProfile = new Account(res.data)
-    // logger.log('[CURRENT PROFILE]', res.data)
+    logger.log('[CURRENT PROFILE]', res.data)
   }
 
   async searchProfiles(search) {

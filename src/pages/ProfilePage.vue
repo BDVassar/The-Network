@@ -15,13 +15,11 @@
         </section>
         <section class="row justify-content-between text-center">
           <div class="col-3">
-            <button class="btn btn-outline-primary" v-if="(page > 1)"
-              @click="changeProfilePage(page - 1)">Newer</button>
+            <button class="btn btn-outline-primary" v-if="(page > 1)" @click="changePage(page - 1)">Newer</button>
             <button class="btn btn-outline-primary" v-else disabled>Newer</button>
           </div>
           <div class="col-3">
-            <button class="btn btn-outline-primary" v-if="(page < maxPage)"
-              @click="changeProfilePage(page + 1)">Older</button>
+            <button class="btn btn-outline-primary" v-if="(page < maxPage)" @click="changePage(page + 1)">Older</button>
             <button class="btn btn-outline-primary" v-else disabled>Older</button>
           </div>
         </section>
@@ -90,9 +88,9 @@ export default {
       page: computed(() => AppState.page),
       maxPage: computed(() => AppState.maxPage),
 
-      async changeProfilePage(page) {
+      async changePage(page) {
         try {
-          await postService.changePage(page)
+          await postService.changePage(page, route.params.id)
         } catch (error) {
           Pop.error(error)
           logger.error(error)

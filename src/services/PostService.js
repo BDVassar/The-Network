@@ -22,7 +22,8 @@ class PostService {
     AppState.posts = res.data.posts.map(p => new Post(p))
     // logger.log('[PostById]', res.data)
     AppState.maxPage = res.data.totalPages
-    logger.log(AppState.maxPage)
+    AppState.page = 1
+    // logger.log(AppState.maxPage)
   }
 
   async getPostsByMyId() {
@@ -53,18 +54,18 @@ class PostService {
     }
   }
 
-  async changePage(page) {
-    const res = await api.get('api/posts?page=' + page)
-    // logger.log('[NEXT/PREVIOUS PAGE]', res.data)
-    AppState.posts = res.data.posts.map(p => new Post(p))
-    AppState.page = page
-  }
-
-  async changeProfilePage(page) {
-    const res = await api.get('api/posts?page=' + page, { params: { creatorId: AppState.activeProfile.id } })
-    // logger.log('[NEXT/PREVIOUS PAGE]', res.data)
-    AppState.activePosts = res.data.posts.map(p => new Post(p))
-    AppState.page = page
+  async changePage(page, id) {
+    if (id != null) {
+      const res = await api.get('api/posts', { params: { creatorId: id, page: page } })
+      // logger.log('[NEXT/PREVIOUS PAGE]', res.data)
+      AppState.posts = res.data.posts.map(p => new Post(p))
+      AppState.page = page
+    } else {
+      const res = await api.get('api/posts?page=' + page)
+      // logger.log('[NEXT/PREVIOUS PAGE]', res.data)
+      AppState.posts = res.data.posts.map(p => new Post(p))
+      AppState.page = page
+    }
   }
 
   async searchPosts(search) {

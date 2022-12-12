@@ -14,9 +14,9 @@
         </div>
         <div class="dropdown-menu dropdown-menu-lg-left p-0" aria-labelledby="authDropdown">
           <div class="list-group">
-            <router-link :to="{ name: 'Account' }">
+            <router-link :to="{ name: 'Profile' }">
               <div class="list-group-item dropdown-item list-group-item-action">
-                Manage Account
+                Manage Profile
               </div>
             </router-link>
             <div class="list-group-item dropdown-item list-group-item-action text-danger selectable" @click="logout">
@@ -51,4 +51,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
 </style>

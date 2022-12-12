@@ -2,7 +2,9 @@
   <div class="col-12 elevation-5 rounded p-4">
     <section class="row align-items-center justify-content-center">
       <div class="col-2">
-        <img class="img-fluid  rounded-circle" :src="post.creator.picture" alt="">
+        <router-link :to="{ name: 'CreatorProfile', params: { id: post.creatorId } }">
+          <img class="img-fluid  rounded-circle selectable" :src="post.creator.picture" alt="">
+        </router-link>
       </div>
       <div class="col-9">
         <section class="row justify-content-between">

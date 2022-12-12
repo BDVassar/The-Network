@@ -1,13 +1,18 @@
 <template>
   <div class="container-fluid">
     <section class="row justify-content-between">
-      <div class="col-12 col-md-3 p-3 elevation-5">
+      <div v-if="user.isAuthenticated" class="col-12 col-md-3 p-3 elevation-5">
         <section class="row justify-content-center align-items-center g-2 p-2 sticky-top">
           <Profile :profile="profile" />
         </section>
       </div>
-      <div class="div col-12 col-md-6">
-        <section class="row justify-content-centers p-2">
+      <div v-else class="col-12 col-md-3 p-3">
+        <section v-if="coms != null" class="row justify-content-center align-items-center g-5 p-5">
+          <Com :coms="coms" />
+        </section>
+      </div>
+      <div v-if="profile" class="div col-12 col-md-6">
+        <section v-if="user.isAuthenticated" class="row justify-content-centers p-2">
           <CreatePost :profile="profile" />
         </section>
         <section v-if="profile" v-for="p in posts" class="row justify-content-center p-2">
@@ -15,15 +20,16 @@
         </section>
         <section class="row justify-content-between text-center">
           <div class="col-3">
-            <button class="btn btn-outline-primary">Newer</button>
+            <button class="btn btn-outline-primary" v-if="(page > 1)" @click="changePage(page - 1)">Newer</button>
+            <button class="btn btn-outline-primary" v-else disabled>Newer</button>
           </div>
           <div class="col-3">
-            <button class="btn btn-outline-primary">Older</button>
+            <button class="btn btn-outline-primary" @click="changePage(page + 1)">Older</button>
           </div>
         </section>
       </div>
       <div class="col-12 col-md-3 p-3">
-        <section v-if="coms != null" class="row justify-content-center align-items-center g-5 mt-5 p-5">
+        <section v-if="coms != null" class="row justify-content-center align-items-center g-5 p-5">
           <Com :coms="coms" />
         </section>
       </div>
@@ -66,9 +72,20 @@ export default {
       getPosts();
     })
     return {
+      user: computed(() => AppState.user),
       profile: computed(() => AppState.account),
       coms: computed(() => AppState.coms),
-      posts: computed(() => AppState.posts)
+      posts: computed(() => AppState.posts),
+      page: computed(() => AppState.page),
+
+      async changePage(page) {
+        try {
+          await postService.changePage(page)
+        } catch (error) {
+          Pop.error(error)
+          logger.error(error)
+        }
+      }
     }
   }
 }

@@ -10,11 +10,11 @@
         <section class="row justify-content-centers p-2">
           <div class="col-12 elevation-5 rounded profileCard">
             <section class="row coverImg " height="45px">
-              <img :src="activeProfile.coverImg" alt="">
+              <img :src="profile.coverImg" alt="">
             </section>
             <section class="row justify-content-between p-2">
               <div class="col-3">
-                <img class="rounded-circle profilePic" :src="activeProfile.picture" alt="">
+                <img class="rounded-circle profilePic" :src="profile.picture" alt="">
               </div>
               <div class="col-4 d-flex justify-content-evenly fs-2">
                 <i>
@@ -30,34 +30,36 @@
             </section>
             <section class="row p-4 justify-content-end">
               <div class="col-12 text-start">
-                <p>{{ activeProfile.class }}</p>
+                <p>{{ profile.class }}</p>
               </div>
               <div class="col-12 text-start">
                 <h5>
-                  {{ activeProfile.name }}
+                  {{ profile.name }}
                 </h5>
               </div>
               <div class="col-12 text-start">
                 <p>
-                  {{ activeProfile.bio }}
+                  {{ profile.bio }}
                 </p>
               </div>
-              <div v-if="(activeProfile.id == profile.id)" class="col-2">
+              <div class="col-2">
                 <button class="btn btn-outline-info">Edit</button>
               </div>
             </section>
           </div>
         </section>
+        <section class="row justify-content-centers p-2">
+          <CreatePost :profile="profile" />
+        </section>
         <section v-if="profile" v-for="p in posts" class="row justify-content-center p-2">
           <Posts :post="p" :profile="profile" />
         </section>
-        <section v-if="(posts)" class="row justify-content-between text-center">
+        <section class="row justify-content-between text-center">
           <div class="col-3">
-            <button class="btn btn-outline-primary" v-if="(page > 1)" @click="changePage(page - 1)">Newer</button>
-            <button class="btn btn-outline-primary" v-else disabled>Newer</button>
+            <button class="btn btn-outline-primary">Newer</button>
           </div>
           <div class="col-3">
-            <button class="btn btn-outline-primary" @click="changePage(page + 1)">Older</button>
+            <button class="btn btn-outline-primary">Older</button>
           </div>
         </section>
       </div>
@@ -76,7 +78,6 @@ import { onMounted } from "vue";
 import { AppState } from "../AppState.js";
 import { comService } from "../services/ComService.js"
 import { postService } from "../services/PostService.js"
-import { profileService } from "../services/ProfileService.js"
 import { logger } from "../utils/Logger.js";
 import Pop from "../utils/Pop.js";
 import { useRoute } from "vue-router";
@@ -94,18 +95,9 @@ export default {
       }
     }
 
-    async function getPostsById() {
+    async function getPostsByMyId() {
       try {
-        await postService.getPostsById(route.params.id)
-      } catch (error) {
-        Pop.error(error)
-        logger.error(error)
-      }
-    }
-
-    async function getProfileByProfileId() {
-      try {
-        await profileService.getProfileBryProfileId(route.params.id)
+        await postService.getPostsByMyId()
       } catch (error) {
         Pop.error(error)
         logger.error(error)
@@ -114,24 +106,12 @@ export default {
 
     onMounted(() => {
       getComs();
-      getPostsById();
-      getProfileByProfileId()
+      getPostsByMyId();
     })
     return {
-      activeProfile: computed(() => AppState.activeProfile),
       profile: computed(() => AppState.account),
       coms: computed(() => AppState.coms),
-      posts: computed(() => AppState.posts),
-      page: computed(() => AppState.profilePage),
-
-      async changePage(page) {
-        try {
-          await postService.changePage(page)
-        } catch (error) {
-          Pop.error(error)
-          logger.error(error)
-        }
-      }
+      posts: computed(() => AppState.posts)
     }
   }
 }
@@ -157,7 +137,6 @@ export default {
 
   .profilePic {
     transform: translateY(-50px);
-    height: 150px;
   }
 }
 </style>

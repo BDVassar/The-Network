@@ -12,16 +12,17 @@ const routes = [
     component: loadPage('HomePage')
   },
   {
-    path: '/profile',
+    path: '/Profile',
     name: 'Profile',
-    component: loadPage('ProfilePage')
+    component: loadPage('MyProfilePage'),
+    beforeEnter: authGuard
   },
   {
-    path: '/account',
-    name: 'Account',
-    component: loadPage('AccountPage'),
+    path: '/Profile/:id',
+    name: 'CreatorProfile',
+    component: loadPage('ProfilePage'),
     beforeEnter: authGuard
-  }
+  },
 ]
 
 export const router = createRouter({

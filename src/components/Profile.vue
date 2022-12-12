@@ -1,5 +1,5 @@
 <template>
-  <div class="col-12">
+  <div v-if="profile" class="col-12">
     <img class="img-fluid rounded-circle border border-primary elevation-3" :src="profile.picture" alt="No Photo">
     <i v-if="(profile.graduated == true)"
       class="mdi mdi-school fs-5 bg-light rounded-circle border border-info elevation-3">

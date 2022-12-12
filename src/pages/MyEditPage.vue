@@ -164,6 +164,7 @@ export default {
       profile: computed(() => AppState.account),
       coms: computed(() => AppState.coms),
       posts: computed(() => AppState.posts),
+      maxPage: computed(() => AppState.maxPage),
 
       async updateProfile() {
         try {

@@ -1,5 +1,5 @@
 <template>
-  <form @submit.prevent="createPost()">
+  <form @submit="createPost()">
     <div class="col-12 elevation-5 rounded p-4">
       <section class="row align-items-top justify-content-center">
         <div class="col-2 p-0">

@@ -11,14 +11,12 @@
           <Com :coms="coms" />
         </section>
       </div>
-      <div v-if="profile" class="div col-12 col-md-6">
+      <div class="div col-12 col-md-6">
         <section class="row justify-content-centers p-2">
-          <router-link :to="{ name: 'SearchPage' }">
-            <button class=" col-12 btn btn-outline-primary"><i class="mdi mdi-magnify"></i> Search</button>
-          </router-link>
+          <SearchBar />
         </section>
-        <section v-if="user.isAuthenticated" class="row justify-content-centers p-2">
-          <CreatePost :profile="profile" />
+        <section v-if="searchedProfiles" v-for="profile in searchedProfiles" class="row justify-content-centers p-2">
+          <ProfileCard :activeProfile="profile" :profile="profile" />
         </section>
         <section v-if="profile" v-for="p in posts" class="row justify-content-center p-2">
           <Posts :post="p" :profile="profile" />
@@ -29,8 +27,7 @@
             <button class="btn btn-outline-primary" v-else disabled>Newer</button>
           </div>
           <div class="col-3">
-            <button class="btn btn-outline-primary" v-if="(page < maxPage)" @click="changePage(page + 1)">Older</button>
-            <button class="btn btn-outline-primary" v-else disabled>Older</button>
+            <button class="btn btn-outline-primary" @click="changePage(page + 1)">Older</button>
           </div>
         </section>
       </div>
@@ -49,12 +46,12 @@ import { onMounted } from "vue";
 import { AppState } from "../AppState.js";
 import { comService } from "../services/ComService.js"
 import { postService } from "../services/PostService.js"
+import { profileService } from "../services/ProfileService.js";
 import { logger } from "../utils/Logger.js";
 import Pop from "../utils/Pop.js";
 
 export default {
   setup() {
-
     async function getComs() {
       try {
         await comService.getComs()
@@ -64,24 +61,15 @@ export default {
       }
     }
 
-    async function getPosts() {
-      try {
-        await postService.getPosts()
-      } catch (error) {
-        Pop.error(error)
-        logger.error(error)
-      }
-    }
-
     onMounted(() => {
       getComs();
-      getPosts();
     })
     return {
       user: computed(() => AppState.user),
       profile: computed(() => AppState.account),
+      searchedProfiles: computed(() => AppState.searchedProfiles),
       coms: computed(() => AppState.coms),
-      posts: computed(() => AppState.posts),
+      posts: computed(() => AppState.searchedPosts),
       page: computed(() => AppState.page),
       maxPage: computed(() => AppState.maxPage),
 

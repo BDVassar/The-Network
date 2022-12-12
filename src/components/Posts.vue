@@ -12,7 +12,15 @@
             <h5>{{ post.creator.name }}</h5>
           </div>
           <div v-if="(post.creatorId == profile.id)" class="col-1">
-            <h5 class="mdi mdi-dots-horizontal"></h5>
+            <div class="dropdown">
+              <button type="button" class="btn btn-link mdi mdi-dots-horizontal fs-5 text-dark"
+                data-bs-toggle="dropdown" aria-expanded="false">
+              </button>
+              <ul class="dropdown-menu">
+                <li><a @click="removePost(post.id)" class="dropdown-item text-danger mdi mdi-delete" href="#">delete</a>
+                </li>
+              </ul>
+            </div>
           </div>
         </section>
         <section class="row">
@@ -26,9 +34,14 @@
     <section class="row">
       <img :src="post.imgUrl" alt="">
     </section>
-    <section class="row justify-content-end">
-      <div class="col-2 fs-5">
-        <p><span class=" text-danger mdi mdi-heart-outline selectable"></span>{{ post.likes.length }}</p>
+    <section v-if="profile" class="row justify-content-end">
+      <div v-if="(post.likedId == profile.id)" class="col-2 fs-5">
+        <p><span class=" text-danger mdi mdi-heart selectable"></span>{{ post.likes.length }}</p>
+      </div>
+      <div v-else class="col-2 fs-5">
+        <p><span @click="likePost(post.id)" class=" text-danger mdi mdi-heart-outline selectable"></span>{{
+            post.likes.length
+        }}</p>
       </div>
     </section>
   </div>
@@ -39,13 +52,35 @@
 import { AppState } from '../AppState';
 import { computed, reactive, onMounted } from 'vue';
 import { Post } from "../models/Post.js";
+import Pop from "../utils/Pop.js";
+import { logger } from "../utils/Logger.js";
+import { postService } from "../services/PostService.js";
 export default {
   props: {
     post: { type: Post, required: true },
     profile: { type: Object, required: true }
   },
   setup() {
-    return {}
+    return {
+      async removePost(postId) {
+        try {
+          await postService.removePost(postId)
+        } catch (error) {
+          Pop.error(error)
+          logger.log(error)
+        }
+      },
+
+      async likePost(postId) {
+        try {
+          await postService.likePost(postId)
+        } catch (error) {
+          Pop.error(error)
+          logger.log(error)
+        }
+      }
+
+    }
   }
 };
 </script>
